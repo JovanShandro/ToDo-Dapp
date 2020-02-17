@@ -1,6 +1,6 @@
 import Web3 from "web3";
 
-const getWeb3 = () =>
+export default getWeb3 = () =>
   new Promise((res, rej) => {
     window.addEventListener("load", async () => {
       if (window.ethereum) {
