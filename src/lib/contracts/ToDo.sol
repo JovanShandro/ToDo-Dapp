@@ -39,7 +39,7 @@ contract TodoList {
         tasks.push(newTask);
     }
 
-    function remove(uint256 id) public restricted returns (Task[]) {
+    function remove(uint256 id) public restricted {
         uint256 index = 0;
         for (index; index < tasks.length - 1; index++) {
             if (tasks[index].id == id) {
@@ -53,15 +53,24 @@ contract TodoList {
         }
         delete tasks[tasks.length - 1];
         tasks.length--;
-        return tasks;
     }
 
     function getTasks() public view returns (Task[]) {
         return tasks;
     }
 
-    function getTask(uint256 i) public view returns (Task) {
-        return tasks[i];
+    // function getTask(uint i) public view returns(Task) {
+    //     return tasks[i];
+    // }
+
+    function setStatus(uint256 id, bool status) public {
+        uint256 index = 0;
+        for (index; index < tasks.length; index++) {
+            if (tasks[index].id == id) {
+                tasks[index].status = status;
+                break;
+            }
+        }
     }
 
     modifier restricted() {
