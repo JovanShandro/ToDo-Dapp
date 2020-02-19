@@ -1,9 +1,34 @@
 <template>
-  <q-page class="flex flex-center"> </q-page>
+  <q-page class="flex flex-center flex-column">
+    <p>Metamask detected: {{ stats.metamask }}</p>
+    <p>Network: {{ util.NETWORKS[stats.netId] }}</p>
+    <p>Active account: {{ stats.activeAccount }}</p>
+    <p>Balance of account: {{ stats.balance }}</p>
+  </q-page>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import * as util from "../lib/util";
+
 export default {
-  name: "PageIndex"
+  name: "PageIndex",
+  data() {
+    return {
+      util
+    };
+  },
+  computed: {
+    ...mapState("todo", ["stats"])
+  },
+  beforeCreate() {
+    this.$store.dispatch("todo/setWeb3");
+  }
 };
 </script>
+
+<style scoped>
+.flex-column {
+  flex-direction: column;
+}
+</style>
