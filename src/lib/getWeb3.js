@@ -1,30 +1,59 @@
 import Web3 from "web3";
 
-export default getWeb3 = () =>
-  new Promise((res, rej) => {
-    window.addEventListener("load", async () => {
-      if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        try {
-          // Request account access if needed
-          await window.ethereum.enable();
-          res(web3);
-        } catch (err) {
-          rej(err);
-        }
-      } else if (window.web3) {
-        // Use Mist/MetaMask's provider.
-        const web3 = window.web3;
-        res(web3);
-      }
-      // Fallback to localhost
-      else {
-        const provider = new Web3.providers.HttpProvider(
-          "http://127.0.0.1:8545"
-        );
-        // Use local web3 instance
-        const web3 = new Web3(provider);
-        res(web3);
+const getWeb3 = new Promise(function(resolve, reject) {
+  // Check for injected web3 from Metamask
+  if (typeof window.web3 !== "undefined") {
+    var web3 = new Web3(window.web3.currentProvider);
+    resolve({
+      metamask: web3.isConnected(),
+      web3() {
+        return web3;
       }
     });
+  } else {
+    reject(new Error("Failed to connect to Metamask!!!"));
+  }
+})
+  .then(value => {
+    return new Promise(function(resolve, reject) {
+      // Get the id of the network
+      value.web3().version.getNetwork((err, netId) => {
+        if (err) {
+          reject(new Error("Failed to get id of the network"));
+        } else {
+          value = Object.assign({}, value, { netId });
+          resolve(value);
+        }
+      });
+    });
+  })
+  .then(value => {
+    return new Promise(function(resolve, reject) {
+      // Get the current active address
+      value.web3().eth.getCoinbase((err, coinbase) => {
+        if (err) {
+          reject(new Error("Failed to get the active account!"));
+        } else {
+          value = Object.assign({}, value, { activeAccount: coinbase });
+          resolve(value);
+        }
+      });
+    });
+  })
+  .then(value => {
+    return new Promise(function(resolve, reject) {
+      // Get balance for the active account
+      value.web3().eth.getBalance(value.activeAccount, (err, balance) => {
+        if (err) {
+          reject(
+            new Error("Failed to get balance of account " + value.activeAccount)
+          );
+        } else {
+          value = Object.assign({}, value, { balance });
+          resolve(value);
+        }
+      });
+    });
   });
+
+export default getWeb3;
