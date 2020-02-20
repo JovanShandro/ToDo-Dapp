@@ -1,11 +1,27 @@
 <template>
   <q-page class="flex flex-center flex-column">
     <div v-if="stats.metamask">
-      <p>Metamask detected: {{ stats.metamask }}</p>
-      <p>Network: {{ util.NETWORKS[stats.netId] }}</p>
-      <p>Active account: {{ stats.activeAccount }}</p>
-      <p>Balance of account: {{ stats.balance }}</p>
-      <p>Todo List address: {{ listAddress }}</p>
+      <tasks
+        class="q-pb-lg"
+        :completed="false"
+        :tasks="todoTasks"
+        v-if="!R.isEmpty(todoTasks)"
+        >To do</tasks
+      >
+      <tasks
+        class="q-pb-lg"
+        :completed="true"
+        :tasks="completedTasks"
+        v-if="!R.isEmpty(completedTasks)"
+        >Completed</tasks
+      >
+      <div class="q-mt-xl q-pt-xl">
+        <p>Metamask detected: {{ stats.metamask }}</p>
+        <p>Network: {{ util.NETWORKS[stats.netId] }}</p>
+        <p>Active account: {{ stats.activeAccount }}</p>
+        <p>Balance of account: {{ stats.balance }}</p>
+        <p>Todo List address: {{ listAddress }}</p>
+      </div>
     </div>
     <q-banner style="height: 200px" v-else class="bg-orange-3">
       <div class="row q-pb-md">
@@ -26,22 +42,27 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import * as util from "../lib/util";
+import * as R from "ramda";
 
 export default {
   name: "PageIndex",
   data() {
     return {
-      util
+      util,
+      R
     };
   },
-
   computed: {
-    ...mapState("todo", ["stats", "listAddress", "isLoaded"])
+    ...mapState("todo", ["stats", "listAddress", "isLoaded"]),
+    ...mapGetters("todo", ["todoTasks", "completedTasks"])
   },
   beforeCreate() {
     this.$store.dispatch("todo/setWeb3");
+  },
+  components: {
+    tasks: require("../components/tasksList").default
   }
 };
 </script>
