@@ -6,10 +6,10 @@ contract TodoListManager {
 
     function createList() public {
         // create new contract deployed to the blockchain
-        address list = new TodoList(msg.sender);
         if (
             userToList[msg.sender] == 0x0000000000000000000000000000000000000000
         ) {
+            address list = new TodoList(msg.sender);
             userToList[msg.sender] = list;
         }
     }
