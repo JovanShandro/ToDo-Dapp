@@ -4,6 +4,7 @@
     <p>Network: {{ util.NETWORKS[stats.netId] }}</p>
     <p>Active account: {{ stats.activeAccount }}</p>
     <p>Balance of account: {{ stats.balance }}</p>
+    <p>Todo List address: {{ contract }}</p>
   </q-page>
 </template>
 
@@ -18,8 +19,9 @@ export default {
       util
     };
   },
+
   computed: {
-    ...mapState("todo", ["stats"])
+    ...mapState("todo", ["stats", "contract"])
   },
   beforeCreate() {
     this.$store.dispatch("todo/setWeb3");
