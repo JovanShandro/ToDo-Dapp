@@ -6,6 +6,7 @@ contract TodoListManager {
 
     function createList() public {
         // create new contract deployed to the blockchain
+
         if (
             userToList[msg.sender] == 0x0000000000000000000000000000000000000000
         ) {
@@ -55,13 +56,13 @@ contract TodoList {
         tasks.length--;
     }
 
-    function getTasks() public view returns (Task[]) {
-        return tasks;
+    function getNumberOfTasks() public view returns (uint256) {
+        return tasks.length;
     }
 
-    // function getTask(uint i) public view returns(Task) {
-    //     return tasks[i];
-    // }
+    function getTask(uint256 i) public view returns (Task) {
+        return tasks[i];
+    }
 
     function setStatus(uint256 id, bool status) public {
         uint256 index = 0;
