@@ -7,6 +7,8 @@ export default function() {
       activeAccount: null,
       balance: null
     },
-    contract: null
+    contract: null,
+    listAddress: null,
+    tasks: {}
   };
 }
