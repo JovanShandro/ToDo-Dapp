@@ -9,7 +9,9 @@ export function setWeb3Instance(state, payload) {
     web3: payload.web3
   });
 }
-
+export function setContract(state, contract) {
+  state.contract = contract;
+}
 export function updateWeb3(state, updates) {
   state.stats.activeAccount = updates.activeAccount;
   state.stats.balance = updates.balance;

@@ -1,11 +1,11 @@
 import Web3 from "web3";
 
-const getWeb3 = new Promise(function(resolve, reject) {
+const getWeb3 = new Promise(async function(resolve, reject) {
   // Check for injected web3 from Metamask
   if (typeof window.web3 !== "undefined") {
     var web3 = new Web3(window.web3.currentProvider);
     resolve({
-      metamask: web3.isConnected(),
+      metamask: await web3.eth.net.isListening(),
       web3() {
         return web3;
       }
@@ -17,7 +17,7 @@ const getWeb3 = new Promise(function(resolve, reject) {
   .then(value => {
     return new Promise(function(resolve, reject) {
       // Get the id of the network
-      value.web3().version.getNetwork((err, netId) => {
+      value.web3().eth.net.getId((err, netId) => {
         if (err) {
           reject(new Error("Failed to get id of the network"));
         } else {

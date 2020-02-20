@@ -6,6 +6,7 @@ export default function() {
       netId: null,
       activeAccount: null,
       balance: null
-    }
+    },
+    contract: null
   };
 }
