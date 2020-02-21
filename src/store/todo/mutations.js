@@ -18,6 +18,7 @@ export function setContract(state, contract) {
   state.contract = contract;
 }
 export function setTasks(state, tasks) {
+  state.tasks = {};
   for (let i = 0; i < tasks.length; i++) {
     Vue.set(state.tasks, tasks[i][2], {
       text: tasks[i][0],

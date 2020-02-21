@@ -40,7 +40,7 @@ export default {
           persistent: true
         })
         .onOk(() => {
-          //   this.deleteTask(id);
+          this.$store.dispatch("todo/deleteTask", id);
         });
     }
   }

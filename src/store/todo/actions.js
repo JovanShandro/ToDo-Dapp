@@ -32,6 +32,15 @@ export async function loadItems({ state, commit }) {
   commit("setTasks", tasks);
 }
 
+export async function deleteTask({ state, dispatch }, id) {
+  await state
+    .contract()
+    .methods.remove(id)
+    .send({
+      from: state.stats.activeAccount
+    });
+  dispatch("loadItems");
+}
 export async function getContractInstance({ state, commit, dispatch }, web3) {
   counter = 1;
   //check if there is a todo list instance
