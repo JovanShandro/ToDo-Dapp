@@ -34,7 +34,8 @@
           Could not detect Metamask.
         </p>
         <p class="text-center">
-          Please make sure to connect to the Metamask extension
+          Please make sure to connect to the Metamask extension and refresh the
+          page.
         </p>
       </div>
     </q-banner>
