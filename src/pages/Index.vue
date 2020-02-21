@@ -22,6 +22,16 @@
         <p>Balance of account: {{ stats.balance }}</p>
         <p>Todo List address: {{ listAddress }}</p>
       </div>
+      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+        <q-btn
+          color="primary"
+          round
+          size="24px"
+          icon="add"
+          class="all-pointer-events"
+          @click="showAddTask = true"
+        />
+      </div>
     </div>
     <q-banner style="height: 200px" v-else class="bg-orange-3">
       <div class="row q-pb-md">
@@ -39,6 +49,10 @@
         </p>
       </div>
     </q-banner>
+
+    <q-dialog v-model="showAddTask">
+      <add-task-dialog @close="showAddTask = false" />
+    </q-dialog>
   </q-page>
 </template>
 
@@ -52,7 +66,8 @@ export default {
   data() {
     return {
       util,
-      R
+      R,
+      showAddTask: false
     };
   },
   computed: {
@@ -63,7 +78,8 @@ export default {
     this.$store.dispatch("todo/setWeb3");
   },
   components: {
-    tasks: require("../components/tasksList").default
+    tasks: require("../components/tasksList").default,
+    "add-task-dialog": require("../components/addTaskDialog").default
   }
 };
 </script>

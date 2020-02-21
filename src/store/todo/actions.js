@@ -20,13 +20,13 @@ export async function loadItems({ state, commit }) {
   const length = await state
     .contract()
     .methods.getNumberOfTasks()
-    .call({ from: state.activeAccount });
+    .call({ from: state.stats.activeAccount });
   const tasks = [];
   for (let i = 0; i < length; i++) {
     const task = await state
       .contract()
       .methods.getTask(i)
-      .call({ from: state.activeAccount });
+      .call({ from: state.stats.activeAccount });
     tasks.push(task);
   }
   commit("setTasks", tasks);
@@ -41,6 +41,15 @@ export async function deleteTask({ state, dispatch }, id) {
     });
   dispatch("loadItems");
 }
+
+export async function addTask({ state, dispatch }, text) {
+  await state
+    .contract()
+    .methods.add(text)
+    .send({ from: state.stats.activeAccount });
+  dispatch("loadItems");
+}
+
 export async function getContractInstance({ state, commit, dispatch }, web3) {
   counter = 1;
   //check if there is a todo list instance
