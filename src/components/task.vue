@@ -1,7 +1,11 @@
 <template>
-  <q-item :class="!task.completed ? 'bg-orange-1' : 'bg-green-1'">
+  <q-item
+    @click="updateStatus(id)"
+    :class="!task.completed ? 'bg-orange-1' : 'bg-green-1'"
+    clickable
+  >
     <q-item-section side>
-      <q-checkbox :value="task.completed" class="no-pointer-events" />
+      <q-checkbox :value="task.completed" />
     </q-item-section>
 
     <q-item-section>
@@ -26,6 +30,9 @@
 export default {
   props: ["task", "id"],
   methods: {
+    updateStatus(id) {
+      this.$store.dispatch("todo/updateStatus", id);
+    },
     deleteItemPopUp(id) {
       this.$q
         .dialog({

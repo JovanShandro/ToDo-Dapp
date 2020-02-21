@@ -50,6 +50,16 @@ export async function addTask({ state, dispatch }, text) {
   dispatch("loadItems");
 }
 
+export async function updateStatus({ state, dispatch }, id) {
+  const newStatus = !state.tasks[id].completed;
+  await state
+    .contract()
+    .methods.setStatus(id, newStatus)
+    .send({
+      from: state.stats.activeAccount
+    });
+  dispatch("loadItems");
+}
 export async function getContractInstance({ state, commit, dispatch }, web3) {
   counter = 1;
   //check if there is a todo list instance
