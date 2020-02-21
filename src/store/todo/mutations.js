@@ -27,6 +27,10 @@ export function setTasks(state, tasks) {
   }
 }
 
+export function setIsWriting(state, value) {
+  state.isWriting = value;
+}
+
 export function updateWeb3(state, updates) {
   state.stats.activeAccount = updates.activeAccount;
   state.stats.balance = updates.balance;

@@ -9,6 +9,7 @@ export default function() {
     },
     contract: null,
     listAddress: null,
-    tasks: {}
+    tasks: {},
+    isWriting: false
   };
 }

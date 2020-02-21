@@ -5,6 +5,9 @@
         <q-toolbar-title>
           Todo App
         </q-toolbar-title>
+        <div v-if="isWriting" class="q-toolbar-item">
+          Please wait until the transaction finishes...
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -15,11 +18,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Layout",
-
-  data() {
-    return {};
+  computed: {
+    ...mapState("todo", ["isWriting"])
   }
 };
 </script>

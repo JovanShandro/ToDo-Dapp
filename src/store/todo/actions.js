@@ -32,33 +32,45 @@ export async function loadItems({ state, commit }) {
   commit("setTasks", tasks);
 }
 
-export async function deleteTask({ state, dispatch }, id) {
-  await state
-    .contract()
-    .methods.remove(id)
-    .send({
-      from: state.stats.activeAccount
-    });
+export async function deleteTask({ state, commit, dispatch }, id) {
+  commit("setIsWriting", true);
+  try {
+    await state
+      .contract()
+      .methods.remove(id)
+      .send({
+        from: state.stats.activeAccount
+      });
+  } catch (error) {}
   dispatch("loadItems");
+  commit("setIsWriting", false);
 }
 
-export async function addTask({ state, dispatch }, text) {
-  await state
-    .contract()
-    .methods.add(text)
-    .send({ from: state.stats.activeAccount });
+export async function addTask({ state, commit, dispatch }, text) {
+  commit("setIsWriting", true);
+  try {
+    await state
+      .contract()
+      .methods.add(text)
+      .send({ from: state.stats.activeAccount });
+  } catch (error) {}
   dispatch("loadItems");
+  commit("setIsWriting", false);
 }
 
-export async function updateStatus({ state, dispatch }, id) {
+export async function updateStatus({ state, commit, dispatch }, id) {
   const newStatus = !state.tasks[id].completed;
-  await state
-    .contract()
-    .methods.setStatus(id, newStatus)
-    .send({
-      from: state.stats.activeAccount
-    });
+  commit("setIsWriting", true);
+  try {
+    await state
+      .contract()
+      .methods.setStatus(id, newStatus)
+      .send({
+        from: state.stats.activeAccount
+      });
+  } catch (error) {}
   dispatch("loadItems");
+  commit("setIsWriting", false);
 }
 export async function getContractInstance({ state, commit, dispatch }, web3) {
   counter = 1;

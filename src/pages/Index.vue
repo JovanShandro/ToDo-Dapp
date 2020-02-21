@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page :class="{ 'cursor-wait': isWriting }">
     <div class="row" v-if="stats.metamask">
       <div class="col q-pb-lg q-ma-sm">
         <div style="height: 200px"></div>
@@ -88,7 +88,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("todo", ["stats", "listAddress", "isLoaded"]),
+    ...mapState("todo", ["stats", "listAddress", "isLoaded", "isWriting"]),
     ...mapGetters("todo", ["todoTasks", "completedTasks"])
   },
   beforeCreate() {
