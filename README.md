@@ -1,8 +1,6 @@
 # Todo-Dapp
 A Todo list application that stores the information in the ethereum blockchain.
 
-A Quasar Framework app
-
 ## Install the dependencies
 ```bash
 npm install
