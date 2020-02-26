@@ -16,6 +16,9 @@
         style="height: 280px !important"
       >
         <div class="text-center">
+          <div>
+            <img src="../assets/user.jpeg" id="userIcon" alt="" />
+          </div>
           <span class="text-bold"> Network:</span>
           {{ util.NETWORKS[stats.netId] }} <br /><br />
           <span class="text-bold">Active account: </span
@@ -48,22 +51,17 @@
         />
       </div>
     </div>
-    <q-banner style="height: 200px" v-else class="bg-orange-3 absolute-center">
+    <q-banner style="height: 200px" v-else class=" absolute-center">
       <div class="row q-pb-md">
-        <i
-          class="col-4 offset-4 text-center fab fa-wolf-pack-battalion fa-4x"
-        ></i>
+        <img src="../assets/metamask.png" id="metamask" alt="" />
       </div>
       <div class="column" style="font-size: 18px">
         <p class="text-center">
           Could not detect Metamask.
-        </p>
-        <br />
-        <p class="text-center">
+          <br />
           Please make sure to connect to the Metamask extension and refresh the
           page.
         </p>
-        <br />
       </div>
     </q-banner>
 
@@ -106,8 +104,28 @@ export default {
   flex-direction: column;
 }
 
+#metamask {
+  margin: 0 auto;
+  width: 200px;
+}
+
+#userIcon {
+  margin: 0 auto;
+  width: 100px;
+}
+
+p.text-center {
+  margin-top: 10px;
+  font-size: 20px;
+  font-family: monospace;
+  font-weight: 500;
+}
+
+.q-banner.absolute-center {
+  top: 40%;
+}
+
 .block {
   border-radius: 20%;
-  background-color: rgb(26, 143, 190, 0.4);
 }
 </style>

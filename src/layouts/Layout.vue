@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header v-if="stats.metamask" elevated>
       <q-toolbar>
         <q-toolbar-title>
           Todo App
@@ -23,7 +23,7 @@ import { mapState } from "vuex";
 export default {
   name: "Layout",
   computed: {
-    ...mapState("todo", ["isWriting"])
+    ...mapState("todo", ["isWriting", "stats"])
   }
 };
 </script>
