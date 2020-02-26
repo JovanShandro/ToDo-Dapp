@@ -1,4 +1,5 @@
-# Quasar App (todo)
+# Todo-Dapp
+A Todo list application that stores the information in the ethereum blockchain.
 
 A Quasar Framework app
 
