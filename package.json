@@ -2,7 +2,7 @@
   "name": "todo",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "productName": "ToDo Dapp",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "JovanShandro <shandrojovan@gmail.com>",
