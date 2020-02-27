@@ -1,7 +1,7 @@
 <template>
   <q-page :class="{ 'cursor-wait': isWriting }">
     <div class="row" v-if="stats.metamask">
-      <div class="col q-pb-lg q-ma-sm">
+      <div class="col-12 col-sm q-pb-lg q-ma-sm">
         <div style="height: 200px"></div>
         <tasks
           :completed="false"
@@ -12,7 +12,7 @@
         </tasks>
       </div>
       <div
-        class="block overflow-hidden q-mt-xl q-ma-sm col q-pt-xl"
+        class="block overflow-hidden q-mt-xl q-ma-sm col-12 col-sm q-pt-xl"
         style="height: 280px !important"
       >
         <div class="text-center">
@@ -25,7 +25,6 @@
           >{{ stats.activeAccount }} <br /><br />
           <span class="text-bold">Balance of account: </span
           >{{ stats.web3().utils.fromWei(stats.balance, "ether") }} <br /><br />
-          <span class="text-bold">List address: </span>{{ listAddress }} <br />
         </div>
       </div>
       <div class="col q-pb-lg col q-ma-sm">
@@ -68,6 +67,27 @@
     <q-dialog v-model="showAddTask">
       <add-task-dialog @close="showAddTask = false" />
     </q-dialog>
+
+    <q-dialog v-model="showInfoDialog" persistent>
+      <q-card id="infoCard">
+        <q-card-section class="row items-center">
+          <q-avatar icon="info" flat text-color="primary" />
+          <span class="q-ml-md">
+            Do not panic if you get asked to confirm 2 transactions as soon as
+            you enter the page!
+          </span>
+        </q-card-section>
+        <q-card-section class="q-mx-md">
+          If you get asked to submit 2 transactions, they will be for
+          initializing contracts for allowing you to interact with the
+          blockchain network. Don't worry, this process is done only once as we
+          use cookies to store the needed information.
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Ok" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -81,8 +101,10 @@ export default {
   data() {
     return {
       util,
+      flag: true,
       R,
-      showAddTask: false
+      showAddTask: false,
+      showInfoDialog: true
     };
   },
   computed: {
@@ -114,6 +136,15 @@ export default {
   width: 100px;
 }
 
+#infoCard {
+  max-width: 800px !important;
+  font-size: 17px;
+}
+
+#infoCard span {
+  font-weight: 500;
+}
+
 p.text-center {
   margin-top: 10px;
   font-size: 20px;
@@ -123,6 +154,10 @@ p.text-center {
 
 .q-banner.absolute-center {
   top: 40%;
+}
+
+.q-avatar {
+  transform: scale(1.7);
 }
 
 .block {

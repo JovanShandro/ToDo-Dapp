@@ -31,9 +31,20 @@ export function setIsWriting(state, value) {
   state.isWriting = value;
 }
 
+export function clearTasks(state) {
+  state.tasks = {};
+}
+
 export function updateWeb3(state, updates) {
-  state.stats.activeAccount = updates.activeAccount;
-  state.stats.balance = updates.balance;
+  if(!R.isNil(updates.activeAccount)) {
+    state.stats.activeAccount = updates.activeAccount;
+  }
+  if(!R.isNil(updates.balance)) {
+    state.stats.balance = updates.balance;
+  }
+  if(!R.isNil(updates.netId)) {
+    state.stats.netId = updates.netId;
+  }
   if (updates.flag) {
     state.listAddress = null;
   }

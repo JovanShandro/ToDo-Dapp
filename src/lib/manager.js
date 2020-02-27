@@ -3,9 +3,15 @@ import compiledManager from "./interfaces/TodoListManager.json";
 
 let web3 = new Web3(window.web3.currentProvider);
 
-const manager = new web3.eth.Contract(
-  JSON.parse(compiledManager.interface),
-  "0x277c773f04d6a39068f7b7cabd89127802a01ba7"
-);
+const getManager = address =>
+  new web3.eth.Contract(JSON.parse(compiledManager.interface), address);
 
-export default manager;
+const deployManager = async account => {
+  const contract = await new web3.eth.Contract(
+    JSON.parse(compiledManager.interface)
+  )
+    .deploy({ data: compiledManager.bytecode })
+    .send({ from: account, gas: "1000000" });
+  return contract.options.address;
+};
+export { getManager, deployManager };
