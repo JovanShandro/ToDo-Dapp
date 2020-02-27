@@ -36,13 +36,13 @@ export function clearTasks(state) {
 }
 
 export function updateWeb3(state, updates) {
-  if(!R.isNil(updates.activeAccount)) {
+  if (!R.isNil(updates.activeAccount)) {
     state.stats.activeAccount = updates.activeAccount;
   }
-  if(!R.isNil(updates.balance)) {
+  if (!R.isNil(updates.balance)) {
     state.stats.balance = updates.balance;
   }
-  if(!R.isNil(updates.netId)) {
+  if (!R.isNil(updates.netId)) {
     state.stats.netId = updates.netId;
   }
   if (updates.flag) {

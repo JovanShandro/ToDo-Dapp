@@ -1,59 +1,61 @@
 import Web3 from "web3";
 
-const getWeb3 = new Promise(async function(resolve, reject) {
+const getWeb3 = async () => {
   // Check for injected web3 from Metamask
-  if (typeof window.web3 !== "undefined") {
-    var web3 = new Web3(window.web3.currentProvider);
-    resolve({
-      metamask: await web3.eth.net.isListening(),
-      web3() {
-        return web3;
-      }
-    });
+  let web3;
+
+  if (window.ethereum) {
+    web3 = new Web3(window.ethereum);
+    try {
+      // Request account access if needed
+      await window.ethereum.enable();
+    } catch (error) {
+      throw new Error("Need account access to proceed!");
+    }
+  } else if (typeof window.web3 !== "undefined") {
+    web3 = new Web3(window.web3.currentProvider);
   } else {
-    reject(new Error("Failed to connect to Metamask!!!"));
+    throw new Error("Failed to connect to Metamask!!!");
   }
-})
-  .then(value => {
-    return new Promise(function(resolve, reject) {
-      // Get the id of the network
-      value.web3().eth.net.getId((err, netId) => {
-        if (err) {
-          reject(new Error("Failed to get id of the network"));
-        } else {
-          value = Object.assign({}, value, { netId });
-          resolve(value);
-        }
-      });
-    });
-  })
-  .then(value => {
-    return new Promise(function(resolve, reject) {
-      // Get the current active address
-      value.web3().eth.getCoinbase((err, coinbase) => {
-        if (err) {
-          reject(new Error("Failed to get the active account!"));
-        } else {
-          value = Object.assign({}, value, { activeAccount: coinbase });
-          resolve(value);
-        }
-      });
-    });
-  })
-  .then(value => {
-    return new Promise(function(resolve, reject) {
-      // Get balance for the active account
-      value.web3().eth.getBalance(value.activeAccount, (err, balance) => {
-        if (err) {
-          reject(
-            new Error("Failed to get balance of account " + value.activeAccount)
-          );
-        } else {
-          value = Object.assign({}, value, { balance });
-          resolve(value);
-        }
-      });
-    });
-  });
+
+  // Check if you are logged in on metamask
+  let netId, activeAccount, balance, metamask;
+  try {
+    metamask = await web3.eth.net.isListening();
+  } catch (error) {
+    throw new Error("Failed to check if you are logged in on Metamask!");
+  }
+
+  // Get the id of the network
+  try {
+    netId = await web3.eth.net.getId();
+  } catch (error) {
+    throw new Error("Failed to get id of the network");
+  }
+
+  // Get the current active address
+  try {
+    activeAccount = await web3.eth.getCoinbase();
+  } catch (error) {
+    throw new Error("Failed to get the active account!");
+  }
+
+  // Get balance for the active account
+  try {
+    balance = await web3.eth.getBalance(activeAccount);
+  } catch (error) {
+    throw new Error("Failed to get balance of account " + activeAccount);
+  }
+
+  return {
+    netId,
+    activeAccount,
+    balance,
+    metamask,
+    web3() {
+      return web3;
+    }
+  };
+};
 
 export default getWeb3;

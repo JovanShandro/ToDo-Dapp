@@ -1,12 +1,9 @@
-import Web3 from "web3";
 import compiledManager from "./interfaces/TodoListManager.json";
 
-let web3 = new Web3(window.web3.currentProvider);
-
-const getManager = address =>
+const getManager = web3 => address =>
   new web3.eth.Contract(JSON.parse(compiledManager.interface), address);
 
-const deployManager = async account => {
+const deployManager = web3 => async account => {
   const contract = await new web3.eth.Contract(
     JSON.parse(compiledManager.interface)
   )

@@ -6,15 +6,22 @@ import { LocalStorage } from "quasar";
 
 let counter = 0;
 
-export function setWeb3({ commit, dispatch }) {
-  getWeb3
-    .then(result => {
-      commit("setWeb3Instance", result);
-      dispatch("checkForUpdates");
-    })
-    .catch(err => {
-      console.log(err.message);
-    });
+export async function setWeb3({ commit, dispatch }) {
+  let result;
+  try {
+    result = await getWeb3();
+  } catch (err) {
+    console.log(err.message);
+    return;
+  }
+
+  commit("setWeb3Instance", result);
+  try {
+    dispatch("checkForUpdates");
+  } catch (err) {
+    console.log(err.message);
+    return;
+  }
 }
 
 export async function loadItems({ state, commit }) {
@@ -42,7 +49,9 @@ export async function deleteTask({ state, commit, dispatch }, id) {
       .send({
         from: state.stats.activeAccount
       });
-  } catch (error) {}
+  } catch (err) {
+    console.log(err.message);
+  }
   dispatch("loadItems");
   commit("setIsWriting", false);
 }
@@ -54,7 +63,9 @@ export async function addTask({ state, commit, dispatch }, text) {
       .contract()
       .methods.add(text)
       .send({ from: state.stats.activeAccount });
-  } catch (error) {}
+  } catch (err) {
+    console.log(err.message);
+  }
   dispatch("loadItems");
   commit("setIsWriting", false);
 }
@@ -69,29 +80,32 @@ export async function updateStatus({ state, commit, dispatch }, id) {
       .send({
         from: state.stats.activeAccount
       });
-  } catch (error) {}
+  } catch (err) {
+    console.log(err.message);
+  }
   dispatch("loadItems");
   commit("setIsWriting", false);
 }
 export async function getContractInstance({ state, commit, dispatch }) {
   counter = 1;
-  let manager;
+  let manager,
+    web3 = state.stats.web3();
   // check if manager address stored in local storage
   const hasManager = LocalStorage.has(state.stats.netId);
   // if yes get the contract
   if (hasManager) {
     const address = LocalStorage.getItem(state.stats.netId);
-    manager = getManager(address);
+    manager = getManager(web3)(address);
   } else {
     // if not create one and store it in local storage
     commit("setIsWriting", true);
     let address;
     try {
-      address = await deployManager(state.stats.activeAccount);
+      address = await deployManager(web3)(state.stats.activeAccount);
       LocalStorage.set(state.stats.netId, address);
-      manager = getManager(address);
-    } catch (error) {
-      console.log(error.message);
+      manager = getManager(web3)(address);
+    } catch (err) {
+      console.log(err.message);
       return;
     } finally {
       commit("setIsWriting", false);

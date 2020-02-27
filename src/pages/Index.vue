@@ -68,7 +68,7 @@
       <add-task-dialog @close="showAddTask = false" />
     </q-dialog>
 
-    <q-dialog v-model="showInfoDialog" persistent>
+    <q-dialog v-if="stats.metamask" v-model="showInfoDialog" persistent>
       <q-card id="infoCard">
         <q-card-section class="row items-center">
           <q-avatar icon="info" flat text-color="primary" />
