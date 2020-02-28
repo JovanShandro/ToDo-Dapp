@@ -23,3 +23,5 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+
+## To see the page click [here](https://silly-varahamihira-bc2a4d.netlify.com/)
