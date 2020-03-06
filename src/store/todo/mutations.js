@@ -12,13 +12,13 @@ export function setWeb3Instance(state, payload) {
 }
 
 export function setListAddress(state, address) {
-  state.listAddress = address;
+  Vue.set(state, "listAddress", address);
 }
 export function setContract(state, contract) {
-  state.contract = contract;
+  Vue.set(state, "contract", contract);
 }
 export function setTasks(state, tasks) {
-  state.tasks = {};
+  Vue.set(state, "tasks", {});
   for (let i = 0; i < tasks.length; i++) {
     Vue.set(state.tasks, tasks[i][2], {
       text: tasks[i][0],
@@ -32,20 +32,20 @@ export function setIsWriting(state, value) {
 }
 
 export function clearTasks(state) {
-  state.tasks = {};
+  Vue.set(state, "tasks", {});
 }
 
 export function updateWeb3(state, updates) {
   if (!R.isNil(updates.activeAccount)) {
-    state.stats.activeAccount = updates.activeAccount;
+    Vue.set(state.stats, "activeAccount", updates.activeAccount);
   }
   if (!R.isNil(updates.balance)) {
-    state.stats.balance = updates.balance;
+    Vue.set(state.stats, "balance", updates.balance);
   }
   if (!R.isNil(updates.netId)) {
-    state.stats.netId = updates.netId;
+    Vue.set(state.stats, "netId", updates.netId);
   }
   if (updates.flag) {
-    state.listAddress = null;
+    Vue.set(state, "listAddress", null);
   }
 }
