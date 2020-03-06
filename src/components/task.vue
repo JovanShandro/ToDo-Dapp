@@ -5,7 +5,7 @@
     clickable
   >
     <q-item-section side>
-      <q-checkbox :value="task.completed" />
+      <q-checkbox color="secondary" :value="task.completed" />
     </q-item-section>
 
     <q-item-section>

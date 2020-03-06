@@ -1,7 +1,14 @@
 <template>
-  <q-page :class="{ 'cursor-wait': isWriting }">
+  <q-page
+    :class="{
+      'cursor-wait': isWriting,
+      'styled-background': stats.metamask
+    }"
+    class="flex flex-column"
+  >
+    <!-- tasks to do  -->
     <div class="row" v-if="stats.metamask">
-      <div class="col-12 col-sm q-pb-lg q-ma-sm">
+      <div id="tasks" class="col-12 col-md q-pb-lg q-mt-md">
         <div style="height: 200px"></div>
         <tasks
           :completed="false"
@@ -11,13 +18,16 @@
           To do
         </tasks>
       </div>
+
+      <!-- user info block 1 -->
       <div
-        class="block overflow-hidden q-mt-xl q-ma-sm col-12 col-sm q-pt-xl"
+        id="block1"
+        class="block overflow-hidden q-mt-xl q-ma-sm col-12 col-md q-pt-xl"
         style="height: 280px !important"
       >
-        <div class="text-center">
+        <div class="text-center text-white">
           <div>
-            <img src="../assets/user.jpeg" id="userIcon" alt="" />
+            <img src="../assets/user.png" id="userIcon" alt="" />
           </div>
           <span class="text-bold"> Network:</span>
           {{ util.NETWORKS[stats.netId] }} <br /><br />
@@ -27,7 +37,29 @@
           >{{ stats.web3().utils.fromWei(stats.balance, "ether") }} <br /><br />
         </div>
       </div>
-      <div class="col q-pb-lg col q-ma-sm">
+
+      <!-- user info block -->
+      <div
+        id="block2"
+        class="overflow-hidden q-mt-xl q-ma-sm col-12 order-first q-pt-xl"
+        style="height: 280px !important"
+        :breakpoint="1023"
+      >
+        <div class="text-center text-white">
+          <div>
+            <img src="../assets/user.png" id="userIcon" alt="" />
+          </div>
+          <span class="text-bold"> Network:</span>
+          {{ util.NETWORKS[stats.netId] }} <br /><br />
+          <span class="text-bold">Active account: </span
+          >{{ stats.activeAccount }} <br /><br />
+          <span class="text-bold">Balance of account: </span
+          >{{ stats.web3().utils.fromWei(stats.balance, "ether") }} <br /><br />
+        </div>
+      </div>
+
+      <!-- completed tasks -->
+      <div id="completed" class="col-12 col-md  q-pb-lg q-mt-md ">
         <div style="height: 200px"></div>
         <tasks
           :completed="true"
@@ -37,6 +69,8 @@
           Completed
         </tasks>
       </div>
+
+      <!-- add task button -->
       <div
         class="absolute-bottom q-ma-sm text-center q-mb-lg no-pointer-events"
       >
@@ -50,6 +84,8 @@
         />
       </div>
     </div>
+
+    <!-- No metamask banner -->
     <q-banner style="height: 200px" v-else class=" absolute-center">
       <div class="row q-pb-md">
         <img src="../assets/metamask.png" id="metamask" alt="" />
@@ -64,24 +100,23 @@
       </div>
     </q-banner>
 
+    <!-- add task dialog  -->
     <q-dialog v-model="showAddTask">
       <add-task-dialog @close="showAddTask = false" />
     </q-dialog>
 
+    <!-- Info dialog -->
     <q-dialog v-if="stats.metamask" v-model="showInfoDialog" persistent>
       <q-card id="infoCard">
         <q-card-section class="row items-center">
           <q-avatar icon="info" flat text-color="primary" />
           <span class="q-ml-md">
-            Do not panic if you get asked to confirm 2 transactions as soon as
-            you enter the page!
+            Do not panic if transaction confirmation immediately pops up!
           </span>
         </q-card-section>
         <q-card-section class="q-mx-md">
-          If you get asked to submit 2 transactions, they will be for
-          initializing contracts for allowing you to interact with the
-          blockchain network. Don't worry, this process is done only once as we
-          use cookies to store the needed information.
+          You will be asked only the first time so that a contract is initiated
+          to store your tasks!
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Ok" color="primary" v-close-popup />
@@ -122,6 +157,21 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (min-width: 1024px) {
+  #block2 {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  #block1 {
+    display: none !important;
+  }
+  #tasks,
+  #completed {
+    transform: translateY(-150px);
+  }
+}
 .flex-column {
   flex-direction: column;
 }
