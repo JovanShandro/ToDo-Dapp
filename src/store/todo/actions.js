@@ -1,8 +1,8 @@
 import getWeb3 from "../../lib/getWeb3";
-import { getManager, deployManager } from "../../lib/manager";
+import getManager from "../../lib/manager";
 import compiledTodoList from "../../lib/interfaces/TodoList.json";
 import Web3 from "web3";
-import { LocalStorage } from "quasar";
+import { MANAGERS } from "../../lib/util";
 
 let counter = 0;
 
@@ -90,27 +90,10 @@ export async function getContractInstance({ state, commit, dispatch }) {
   counter = 1;
   let manager,
     web3 = state.stats.web3();
-  // check if manager address stored in local storage
-  const hasManager = LocalStorage.has(state.stats.netId);
-  // if yes get the contract
-  if (hasManager) {
-    const address = LocalStorage.getItem(state.stats.netId);
-    manager = getManager(web3)(address);
-  } else {
-    // if not create one and store it in local storage
-    commit("setIsWriting", true);
-    let address;
-    try {
-      address = await deployManager(web3)(state.stats.activeAccount);
-      LocalStorage.set(state.stats.netId, address);
-      manager = getManager(web3)(address);
-    } catch (err) {
-      console.log(err.message);
-      return;
-    } finally {
-      commit("setIsWriting", false);
-    }
-  }
+
+  // get manager address for the network
+  manager = getManager(web3)(MANAGERS[state.stats.netId]);
+
   //check if there is a todo list instance
   let todoListAddr = await manager.methods
     .getList()
@@ -119,9 +102,16 @@ export async function getContractInstance({ state, commit, dispatch }) {
   // create a list if needed
   if (todoListAddr == "0x0000000000000000000000000000000000000000") {
     commit("setIsWriting", true);
-    await manager.methods.createList().send({
-      from: state.stats.activeAccount
-    });
+    try {
+      await manager.methods.createList().send({
+        from: state.stats.activeAccount
+      });
+    } catch (err) {
+      console.log(err.message);
+      commit("setIsWriting", false);
+      return;
+    }
+
     commit("setIsWriting", false);
 
     todoListAddr = await manager.methods
